@@ -4,7 +4,7 @@ package ecote_markers;
 public final class Consts {
     //errors
     public static final String ERR_NO_FILE = "No file submitted!";
-    public static final String ERR_WRONG_FILENAME = "Wrong filename!";
+    public static final String ERR_FILE_NOT_FOUND = "File not found!";
     public static final String ERR_WRONG_FILETYPE = "Only text (.txt) files allowed!";
     public static final String ERR_IN_LINE = "Error: in line ";//+ lineNumber
     public static final String ERR_WRONG_NAME = " name contains a special character";
