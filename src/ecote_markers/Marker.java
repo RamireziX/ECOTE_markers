@@ -1,12 +1,14 @@
 package ecote_markers;
 
 public class Marker {
+    public static int noOfMarkers = 0; //for unique id
     private int id, lineOfOccurence;
     private String name;
     private Type type;
 
-    public Marker(int id, int lineOfOccurence, String name, Type type) {
-        this.id = id;
+    public Marker(int lineOfOccurence, String name, Type type) {
+        noOfMarkers ++;
+        this.id = noOfMarkers;
         this.lineOfOccurence = lineOfOccurence;
         this.name = name;
         this.type = type;

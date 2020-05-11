@@ -4,7 +4,7 @@ public class Main {
 
     public static void run(){
         String textFromFile =
-                ReadFile.readFile(Consts.NO_TEXT_OK);
+                ReadFile.readFile(/*Consts.NO_TEXT_OK*/Consts.NESTED_OK);
         AnalyseFile.findMarkers(textFromFile);
     }
 
