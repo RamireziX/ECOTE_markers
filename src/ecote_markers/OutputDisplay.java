@@ -12,7 +12,7 @@ public class OutputDisplay {
         }
         //error message with details
         else
-        System.out.print(errorsDescription);
+        System.err.print(errorsDescription);
     }
 
     public static void addTextToDescription(String text){

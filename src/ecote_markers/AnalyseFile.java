@@ -3,9 +3,7 @@ package ecote_markers;
 import java.util.Stack;
 
 public class AnalyseFile {
-    //TODO: pierdzieli sie jak sa te same nazwy markerow i nie wie czy sa bad nested czy not closed
-    //można to ogarnąć jakoś przy sprawdzania nestowania, może rzeczywiście te has closing
-    //albo jednak upakować te no closing i incorrect nesting w jeden błąd
+
     //finds markers and checks nesting and closing
     public static void findMarkers(String text){
         StringBuilder markerName = new StringBuilder();
@@ -13,7 +11,6 @@ public class AnalyseFile {
         Type typeOfMarker = Type.OPEN;
         //stack for nesting check
         Stack<Marker> stack = new Stack<>();
-
         //go through whole text
         for(int i=0;i<text.length();i++){
             char c = text.charAt(i);
@@ -39,32 +36,19 @@ public class AnalyseFile {
                 //create new marker
                 Marker marker = new Marker(
                         lineOfOccurence, markerName.toString(), typeOfMarker);
-                //analyse marker's correctness
-                analyseMarker(marker);
                 //analyse nesting
                 //handle closing marker
                 if(marker.getType() == Type.CLOSE){
-                    if(marker.getName().equals(stack.peek().getName())) {
+                    //proper nesting/closing, pop
+                    if(marker.getName().equals(stack.peek().getName()))
                         stack.pop();
-                    }
-                    else {
-                        //potem jakos to dodac to raportu
-                        //z wszystkimi bledami
-                        //do raportu daj marker name z top stacka
-                        //bo to jest "jego" błąd -> no właśnie niekoniecznie prawda
-                        OutputDisplay.addTextToDescription(Consts.ERR_IN_LINE);
-                        OutputDisplay.addTextToDescription(
-                                Integer.toString(stack.peek().getLineOfOccurence()));
-                        OutputDisplay.addTextToDescription("'"+stack.peek().getName()+"'");
-                        OutputDisplay.addTextToDescription(Consts.ERR_BAD_NESTING);
-                        //System.out.println(Consts.ERR_BAD_CLOSING);
-                        //pop too, because we still want to process
-                        //the rest of the markers
-                        stack.pop();
-                    }
                 }
                 //handle opening marker
                 else {
+                    //analyse marker's correctness
+                    //only for opening
+                    //if closing has wrong name, nesting/closing error
+                    analyseMarker(marker);
                     //push only opening markers
                     stack.push(marker);
                 }
@@ -79,22 +63,39 @@ public class AnalyseFile {
         }
         //stack should always be empty at the end
         //if not empty, there are markers without closing
-        // może gdzieś indziej sprawdzać stack size
-        /*if(!stack.empty()){
-            for(int i=0;i<stack.size();i++){
-                OutputDisplay.addTextToDescription(Consts.ERR_IN_LINE);
-                //tu wez line of occurence z markera z top stacku debilu
-                OutputDisplay.addTextToDescription(
-                        Integer.toString(stack.peek().getLineOfOccurence()));
-                OutputDisplay.addTextToDescription("'"+stack.peek().getName()+"'");
-                OutputDisplay.addTextToDescription(Consts.ERR_NO_CLOSING);
-                stack.pop();
-            }
-        }*/
+        //or not properly nested
+        if(!stack.empty())
+            OutputDisplay.addTextToDescription(Consts.ERR_BAD_NESTING);
+        //no markers found
+        if(Marker.noOfMarkers == 0) {
+            System.out.print(Consts.MSG_FILE);
+            System.out.print(Main.FILENAME);
+            System.out.print(Consts.MSG_NO_MARKERS);
+            System.exit(0);
+        }
     }
 
     //analyses a single marker
     private static void analyseMarker(Marker marker){
+        char[] specialChars = {'/', '*', '!', '@' , '#', '$', '%', '&',
+                '(', ')', '-', '+', '=', '~', '`', '{', '}', '[', ']',
+                ';', ':', '\'', '\"', '\\', '|', ',', '.', '<', '>',
+                '?', '\n', '\t', ' '};
+        //check if marker is empty
+        if(marker.getName().isEmpty()) {
+            OutputDisplay.addTextToDescription(Consts.ERR_IN_LINE);
+            OutputDisplay.addTextToDescription(marker.getLineOfOccurence() + " -");
+            OutputDisplay.addTextToDescription(Consts.ERR_EMPTY_NAME);
+        }
+        //check if marker contains special characters (except for '_')
+        for (char specialChar : specialChars) {
+            if (marker.getName().contains(String.valueOf(specialChar))) {
+                OutputDisplay.addTextToDescription(Consts.ERR_IN_LINE);
+                OutputDisplay.addTextToDescription(marker.getLineOfOccurence() +
+                        " - " + "'" + marker.getName() + "':");
+                OutputDisplay.addTextToDescription(Consts.ERR_WRONG_NAME);
+            }
+        }
     }
 
 

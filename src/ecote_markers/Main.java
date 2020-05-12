@@ -2,7 +2,7 @@ package ecote_markers;
 
 public class Main {
 
-    public static final String FILENAME = Consts.NESTED_WRONG;
+    public static final String FILENAME = Consts.BIG_XML_OK;
 
     public static void run(){
         String textFromFile = ReadFile.readFile(FILENAME);
