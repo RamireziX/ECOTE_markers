@@ -7,10 +7,10 @@ public final class Consts {
     public static final String ERR_FILE_NOT_FOUND = "File not found!";
     public static final String ERR_WRONG_FILETYPE = "Only text (.txt) files allowed!";
     public static final String ERR_IN_LINE = "Error: in line ";//+ lineNumber
-    public static final String ERR_WRONG_NAME = " name contains a special character";
-    public static final String ERR_EMPTY_NAME = " marker name is empty";
-    public static final String ERR_NO_CLOSING = " does not have a closing";
-    public static final String ERR_BAD_NESTING = " is incorrectly nested";
+    public static final String ERR_WRONG_NAME = " name contains a special character\n";
+    public static final String ERR_EMPTY_NAME = " name is empty\n";
+    public static final String ERR_NO_CLOSING = " does not have a closing\n";
+    public static final String ERR_BAD_NESTING = " is incorrectly nested\n";
 
     //messages
     public static final String MSG_NO_MARKERS = ": no markers found!";
@@ -40,4 +40,8 @@ public final class Consts {
             "C:\\Users\\Olek\\Desktop\\ECOTE_markers\\input_files\\empty_name.txt";
     public static final String MULTIPLE_LINES_OK =
             "C:\\Users\\Olek\\Desktop\\ECOTE_markers\\input_files\\multiple_lines_ok.txt";
+    public static final String BIG_XML_OK =
+            "C:\\Users\\Olek\\Desktop\\ECOTE_markers\\input_files\\big_xml.txt";
+    public static final String BIG_XML_BAD_CLOSINGS =
+            "C:\\Users\\Olek\\Desktop\\ECOTE_markers\\input_files\\big_xml_bad_closings.txt";
 }

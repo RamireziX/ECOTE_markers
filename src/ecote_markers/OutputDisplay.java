@@ -1,23 +1,29 @@
 package ecote_markers;
 
 public class OutputDisplay {
-    //either error description, or "everything is fine"
-    private static String result;
+    private static String errorsDescription = "";
 
     public static void printResult(){
-        //jeśli result pusty, print "everything is chill bro"
-        System.out.println(result);
+        //correct structure message
+        if(errorsDescription.isEmpty()){
+            System.out.print(Consts.MSG_FILE);
+            System.out.print(Main.FILENAME);
+            System.out.print(Consts.MSG_CORRECT_FILE);
+        }
+        //error message with details
+        else
+        System.out.print(errorsDescription);
     }
 
-    public static void addTextToResult(String text){
-
+    public static void addTextToDescription(String text){
+       errorsDescription = errorsDescription.concat(text);
     }
 
-    public static String getResult() {
-        return result;
+    public static String getErrorsDescription() {
+        return errorsDescription;
     }
 
-    public static void setResult(String result) {
-        OutputDisplay.result = result;
+    public static void setErrorsDescription(String errorsDescription) {
+        OutputDisplay.errorsDescription = errorsDescription;
     }
 }
