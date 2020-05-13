@@ -43,6 +43,7 @@ public class AnalyseFile {
                     if(marker.getName().equals(stack.peek().getName()))
                         stack.pop();
                 }
+
                 //handle opening marker
                 else {
                     //analyse marker's correctness
@@ -65,7 +66,7 @@ public class AnalyseFile {
         //if not empty, there are markers without closing
         //or not properly nested
         if(!stack.empty())
-            OutputDisplay.addTextToDescription(Consts.ERR_BAD_NESTING);
+            InputOutput.addTextToDescription(Consts.ERR_BAD_NESTING);
         //no markers found
         if(Marker.noOfMarkers == 0) {
             System.out.print(Consts.MSG_FILE);
@@ -83,17 +84,17 @@ public class AnalyseFile {
                 '?', '\n', '\t', ' '};
         //check if marker is empty
         if(marker.getName().isEmpty()) {
-            OutputDisplay.addTextToDescription(Consts.ERR_IN_LINE);
-            OutputDisplay.addTextToDescription(marker.getLineOfOccurence() + " -");
-            OutputDisplay.addTextToDescription(Consts.ERR_EMPTY_NAME);
+            InputOutput.addTextToDescription(Consts.ERR_IN_LINE);
+            InputOutput.addTextToDescription(marker.getLineOfOccurence() + " -");
+            InputOutput.addTextToDescription(Consts.ERR_EMPTY_NAME);
         }
         //check if marker contains special characters (except for '_')
         for (char specialChar : specialChars) {
             if (marker.getName().contains(String.valueOf(specialChar))) {
-                OutputDisplay.addTextToDescription(Consts.ERR_IN_LINE);
-                OutputDisplay.addTextToDescription(marker.getLineOfOccurence() +
+                InputOutput.addTextToDescription(Consts.ERR_IN_LINE);
+                InputOutput.addTextToDescription(marker.getLineOfOccurence() +
                         " - " + "'" + marker.getName() + "':");
-                OutputDisplay.addTextToDescription(Consts.ERR_WRONG_NAME);
+                InputOutput.addTextToDescription(Consts.ERR_WRONG_NAME);
             }
         }
     }

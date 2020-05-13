@@ -1,7 +1,14 @@
 package ecote_markers;
 
-public class OutputDisplay {
+import java.util.Scanner;
+
+public class InputOutput {
     private static String errorsDescription = "";
+
+    public static String inputFilePath(){
+        Scanner sc = new Scanner(System.in);
+        return sc.nextLine();
+    }
 
     public static void printResult(){
         //correct structure message
@@ -24,6 +31,6 @@ public class OutputDisplay {
     }
 
     public static void setErrorsDescription(String errorsDescription) {
-        OutputDisplay.errorsDescription = errorsDescription;
+        InputOutput.errorsDescription = errorsDescription;
     }
 }

@@ -45,4 +45,5 @@ public class Marker {
     public void setType(Type type) {
         this.type = type;
     }
+
 }
