@@ -43,7 +43,6 @@ public class AnalyseFile {
                     if(marker.getName().equals(stack.peek().getName()))
                         stack.pop();
                 }
-
                 //handle opening marker
                 else {
                     //analyse marker's correctness

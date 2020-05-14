@@ -6,6 +6,7 @@ public class InputOutput {
     private static String errorsDescription = "";
 
     public static String inputFilePath(){
+        System.out.print(Consts.MSG_INPUT_FILE);
         Scanner sc = new Scanner(System.in);
         return sc.nextLine();
     }
