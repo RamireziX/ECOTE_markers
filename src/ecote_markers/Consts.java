@@ -9,8 +9,8 @@ public final class Consts {
     public static final String ERR_IN_LINE = "Error: in line ";//+ lineNumber
     public static final String ERR_WRONG_NAME = " name contains a special character\n";
     public static final String ERR_EMPTY_NAME = " marker name is empty\n";
-    public static final String ERR_BAD_NESTING = "Error: file contains markers that" +
-            " are improperly nested or not closed\n";
+    public static final String ERR_BAD_NESTING = " marker is not properly nested\n";
+    public static final String ERR_NO_CLOSING = " marker is not closed\n";
 
     //messages
     public static final String MSG_NO_MARKERS = ": no markers found!";

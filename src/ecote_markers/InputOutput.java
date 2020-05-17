@@ -24,7 +24,15 @@ public class InputOutput {
     }
 
     public static void addTextToDescription(String text){
-       errorsDescription = errorsDescription.concat(text);
+        //to avoid multiple lines of the same message
+        //(happens when checking nesting)
+        if(!errorsDescription.contains(text))
+             errorsDescription = errorsDescription.concat(text);
+    }
+
+    public static void removeTextFromDescription(String text){
+        if(errorsDescription.contains(text))
+            errorsDescription = errorsDescription.replace(text, "");
     }
 
     public static String getErrorsDescription() {
