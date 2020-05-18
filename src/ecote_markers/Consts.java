@@ -7,13 +7,15 @@ public final class Consts {
     public static final String ERR_FILE_NOT_FOUND = "File not found!";
     public static final String ERR_WRONG_FILETYPE = "Only text (.txt) files allowed!";
     public static final String ERR_IN_LINE = "Error: in line ";//+ lineNumber
-    public static final String ERR_WRONG_NAME = " name contains a special character\n";
-    public static final String ERR_EMPTY_NAME = " marker name is empty\n";
+    public static final String ERR_WRONG_NAME = " name contains a special character ";
+    public static final String ERR_EMPTY_NAME = " marker name is empty ";
     public static final String ERR_BAD_NESTING = " marker is not properly nested\n";
     public static final String ERR_NO_CLOSING = " marker is not closed\n";
+    public static final String ERR_NO_OPENING = " closing marker without opening\n";
 
     //messages
     public static final String MSG_NO_MARKERS = ": no markers found!";
+    public static final String MSG_MARKER_TYPE = "(marker type: ";
     public static final String MSG_FILE = "File: ";//+ filename
     public static final String MSG_CORRECT_FILE = " has a correct structure of markers";
     public static final String MSG_INPUT_FILE = "Write path to a text (.txt) file\n(you can use path" +
@@ -33,4 +35,8 @@ public final class Consts {
     public static final String MULTIPLE_LINES_OK = "./input_files/multiple_lines_ok.txt";
     public static final String BIG_XML_OK = "./input_files/big_xml.txt";
     public static final String BIG_XML_BAD_CLOSINGS = "./input_files/big_xml_bad_closings.txt";
+    public static final String TOO_MANY_CLOSINGS = "./input_files/too_many_closings.txt";
+    public static final String HUGE_XML_OK = "./input_files/huge_xml_ok.txt";
+    public static final String HUGE_XML_WRONG = "./input_files/huge_xml_wrong.txt";
+    public static final String VERY_BIG_XML = "./input_files/very_big_xml.txt";
 }

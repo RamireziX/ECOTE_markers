@@ -23,12 +23,16 @@ public class InputOutput {
         System.err.print(errorsDescription);
     }
 
-    public static void addTextToDescription(String text){
+    public static void addTextToDescriptionNoRepeat(String text){
         //to avoid multiple lines of the same message
         //(happens when checking nesting)
         if(!errorsDescription.contains(text))
              errorsDescription = errorsDescription.concat(text);
     }
+    public static void addTextToDescription(String text){
+        errorsDescription = errorsDescription.concat(text);
+    }
+
 
     public static void removeTextFromDescription(String text){
         if(errorsDescription.contains(text))
