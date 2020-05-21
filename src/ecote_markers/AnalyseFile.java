@@ -4,7 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
-//TODO: findMarkers is too long, make some helper methods to reduce duplicate code
+//TODO: zmniejsz trochę tą funkcję find markers, dodaj w ifach najpierw obsługę mniejszego
 public class AnalyseFile {
 
     //finds markers and checks nesting and closing
@@ -46,6 +46,7 @@ public class AnalyseFile {
                 //analyse nesting
                 //handle closing marker
                 if(marker.getType() == Type.CLOSE) {
+                    //najpierw oblusga pustego
                     if (!stack.isEmpty()) {
                         //proper nesting/closing, pop
                         if (marker.getName().equals(stack.peek().getName())) {
@@ -105,7 +106,7 @@ public class AnalyseFile {
             else if(c == '\n')
                 lineOfOccurence ++;
         }
-       //there are markers that have no closing in whole file
+        //there are markers that have no closing in whole file
         if(!notClosed.isEmpty()){
             for(Marker marker : notClosed) {
                 //when is not closed, its also not properly nested
