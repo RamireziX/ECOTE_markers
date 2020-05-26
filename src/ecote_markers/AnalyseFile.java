@@ -4,7 +4,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
-//TODO: zmniejsz trochę tą funkcję find markers, dodaj w ifach najpierw obsługę mniejszego
 public class AnalyseFile {
 
     //finds markers and checks nesting and closing
@@ -44,11 +43,23 @@ public class AnalyseFile {
                 //analyse marker's correctness (special characters etc)
                 analyseMarker(marker);
                 //analyse nesting
+                //handle opening marker
+                if(marker.getType() != Type.CLOSE) {
+                    //push only opening markers
+                    stack.push(marker);
+                    //assume it's not closed yet
+                    notClosed.add(marker);
+                }
                 //handle closing marker
-                if(marker.getType() == Type.CLOSE) {
-                    //najpierw oblusga pustego
-                    if (!stack.isEmpty()) {
-                        //proper nesting/closing, pop
+                else {
+                    if (stack.isEmpty()) {
+                        //closing marker without opening (when stack was emptied)
+                        InputOutput.addTextToDescription(Consts.ERR_IN_LINE +
+                                marker.getLineOfOccurence() + " - " + "'" +
+                                marker.getName() + "':" + Consts.ERR_NO_OPENING);
+                    }
+                    else {
+                        //correct nesting
                         if (marker.getName().equals(stack.peek().getName())) {
                             notClosed.remove(stack.peek());
                             stack.pop();
@@ -56,46 +67,9 @@ public class AnalyseFile {
                         //check, if and where improper nesting happened
                         //or if no closing marker
                         else {
-                            Stack<Marker> tempStack = (Stack<Marker>) stack.clone();
-                            while (!tempStack.isEmpty()) {
-                                tempStack.pop();
-                                //closing marker with no opening
-                                if (tempStack.isEmpty()) {
-                                    InputOutput.addTextToDescription(Consts.ERR_IN_LINE +
-                                            marker.getLineOfOccurence()
-                                            + " - " + "'" +
-                                            marker.getName() + "':" +
-                                            Consts.ERR_NO_OPENING);
-                                    break;
-                                }
-                                //found closing, with improper nesting
-                                else if (marker.getName().equals(tempStack.peek().getName())) {
-                                    InputOutput.addTextToDescriptionNoRepeat(Consts.ERR_IN_LINE +
-                                            stack.peek().getLineOfOccurence()
-                                            + " - " + "'" +
-                                            stack.peek().getName() + "':" +
-                                            Consts.ERR_BAD_NESTING);
-                                    notClosed.remove(tempStack.peek());
-                                    break;
-                                }//no closing found, stays on notClosed list
-                            }
+                            checkNestingAndClosing(stack, notClosed, marker);
                         }
                     }
-                    else{
-                        //closing marker without opening (when stack was emptied)
-                        InputOutput.addTextToDescription(Consts.ERR_IN_LINE +
-                                marker.getLineOfOccurence()
-                                + " - " + "'" +
-                                marker.getName() + "':" +
-                                Consts.ERR_NO_OPENING);
-                    }
-                }
-                //handle opening marker
-                else {
-                    //push only opening markers
-                    stack.push(marker);
-                    //assume it's not closed yet
-                    notClosed.add(marker);
                 }
                 //clear for next marker name
                 //and reset type
@@ -108,23 +82,11 @@ public class AnalyseFile {
         }
         //there are markers that have no closing in whole file
         if(!notClosed.isEmpty()){
-            for(Marker marker : notClosed) {
-                //when is not closed, its also not properly nested
-                //however, no need to print this error
-                InputOutput.removeTextFromDescription(Consts.ERR_IN_LINE +
-                        marker.getLineOfOccurence() + " - " + "'" +
-                        marker.getName() + "':" + Consts.ERR_BAD_NESTING);
-                InputOutput.addTextToDescriptionNoRepeat(Consts.ERR_IN_LINE +
-                        marker.getLineOfOccurence() + " - " + "'" +
-                        marker.getName() + "':" + Consts.ERR_NO_CLOSING);
-            }
+            handleMarkersNoClosing(notClosed);
         }
         //no markers found at all
         if(Marker.noOfMarkers == 0) {
-            System.out.print(Consts.MSG_FILE);
-            System.out.print(Main.FILENAME);
-            System.out.print(Consts.MSG_NO_MARKERS);
-            System.exit(0);
+            handleNoMarkers();
         }
     }
 
@@ -132,26 +94,66 @@ public class AnalyseFile {
 
     //analyses a single marker
     private static void analyseMarker(Marker marker){
-        char[] specialChars = {'/', '*', '!', '@' , '#', '$', '%', '&',
-                '(', ')', '-', '+', '=', '~', '`', '{', '}', '[', ']',
-                ';', ':', '\'', '\"', '\\', '|', ',', '.', '<', '>',
-                '?', '\n', '\t', ' '};
         //check if marker is empty
         if(marker.getName().isEmpty()) {
             InputOutput.addTextToDescriptionNoRepeat(Consts.ERR_IN_LINE +
                     marker.getLineOfOccurence() + " -" + Consts.ERR_EMPTY_NAME +
                     Consts.MSG_MARKER_TYPE + marker.getType().toString() + ")\n");
         }
-        //check if marker contains special characters (except for '_')
-        for (char specialChar : specialChars) {
-            if (marker.getName().contains(String.valueOf(specialChar))) {
-                InputOutput.addTextToDescriptionNoRepeat(Consts.ERR_IN_LINE +
-                        marker.getLineOfOccurence() + " - " + "'" +
-                        marker.getName() + "':" + Consts.ERR_WRONG_NAME +
-                        Consts.MSG_MARKER_TYPE + marker.getType().toString() + ")\n");
+        //not empty name
+        else {
+            //check if marker contains special characters (except for '_')
+            for (char specialChar : Consts.SPECIAL_CHARS) {
+                if (marker.getName().contains(String.valueOf(specialChar))) {
+                    InputOutput.addTextToDescriptionNoRepeat(Consts.ERR_IN_LINE +
+                            marker.getLineOfOccurence() + " - " + "'" +
+                            marker.getName() + "':" + Consts.ERR_WRONG_NAME +
+                            Consts.MSG_MARKER_TYPE + marker.getType().toString() + ")\n");
+                }
             }
         }
     }
 
+    private static void checkNestingAndClosing(Stack<Marker> stack, List<Marker> notClosed, Marker marker) {
+        Stack<Marker> tempStack = (Stack<Marker>) stack.clone();
+        while (!tempStack.isEmpty()) {
+            tempStack.pop();
+            //closing marker with no opening
+            if (tempStack.isEmpty()) {
+                InputOutput.addTextToDescription(Consts.ERR_IN_LINE +
+                        marker.getLineOfOccurence() + " - " + "'" +
+                        marker.getName() + "':" + Consts.ERR_NO_OPENING);
+                break;
+            }
+            //found closing, with improper nesting
+            else if (marker.getName().equals(tempStack.peek().getName())) {
+                InputOutput.addTextToDescriptionNoRepeat(Consts.ERR_IN_LINE +
+                        stack.peek().getLineOfOccurence() + " - " + "'" +
+                        stack.peek().getName() + "':" + Consts.ERR_BAD_NESTING);
+                notClosed.remove(tempStack.peek());
+                break;
+            }//no closing found, stays on notClosed list
+        }
+    }
+
+    private static void handleNoMarkers() {
+        System.out.print(Consts.MSG_FILE);
+        System.out.print(Main.FILENAME);
+        System.out.print(Consts.MSG_NO_MARKERS);
+        System.exit(0);
+    }
+
+    private static void handleMarkersNoClosing(List<Marker> notClosed) {
+        for(Marker marker : notClosed) {
+            //when is not closed, its also not properly nested
+            //however, no need to print this error
+            InputOutput.removeTextFromDescription(Consts.ERR_IN_LINE +
+                    marker.getLineOfOccurence() + " - " + "'" +
+                    marker.getName() + "':" + Consts.ERR_BAD_NESTING);
+            InputOutput.addTextToDescriptionNoRepeat(Consts.ERR_IN_LINE +
+                    marker.getLineOfOccurence() + " - " + "'" +
+                    marker.getName() + "':" + Consts.ERR_NO_CLOSING);
+        }
+    }
 
 }

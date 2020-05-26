@@ -3,8 +3,8 @@ package ecote_markers;
 public class Main {
 
     //to avoid manual input uncomment this and comment the line below
-    public static final String FILENAME = Consts.HUGE_XML_WRONG;
-    //public static final String FILENAME = InputOutput.inputFilePath();
+    //public static final String FILENAME = Consts.BIG_XML_BAD_CLOSINGS;
+    public static final String FILENAME = InputOutput.inputFilePath();
 
     public static void run(){
         String textFromFile = ReadFile.readFile(FILENAME);

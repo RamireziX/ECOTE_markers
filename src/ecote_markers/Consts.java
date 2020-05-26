@@ -21,6 +21,11 @@ public final class Consts {
     public static final String MSG_INPUT_FILE = "Write path to a text (.txt) file\n(you can use path" +
             " \".\\input_files\\[filename]\" to use one of the test files already prepared):\n";
 
+    public static final char[] SPECIAL_CHARS = {'/', '*', '!', '@' , '#', '$', '%', '&',
+            '(', ')', '-', '+', '=', '~', '`', '{', '}', '[', ']',
+            ';', ':', '\'', '\"', '\\', '|', ',', '.', '<', '>',
+            '?', '\n', '\t', ' '};
+
     //filepaths for testing
     public static final String NO_TEXT_OK = "./input_files/no_text_ok.txt";
     public static final String WRONG_PATH = "./input_files/file1.txt";
